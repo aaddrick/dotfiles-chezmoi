@@ -131,19 +131,67 @@ else
   log "chezmoi already installed: $(command -v chezmoi)"
 fi
 
-# 5. chezmoi init + apply -----------------------------------------------------
+# 5. chezmoi init (clone + render config, no apply yet) ----------------------
+# Splitting init from apply lets us enumerate what chezmoi is about to touch
+# and snapshot any pre-existing targets BEFORE they get overwritten.
 if [ ! -d "$HOME/.local/share/chezmoi/.git" ]; then
-  log "Running chezmoi init --apply against $REPO"
-  chezmoi init --apply "$REPO"
+  log "Cloning source via chezmoi init (no apply yet)"
+  chezmoi init "$REPO"
 else
-  log "chezmoi source already cloned; running apply"
-  chezmoi apply
+  log "chezmoi source already cloned; re-rendering config"
+  chezmoi init
 fi
+
+# 6. Snapshot any pre-existing files chezmoi is about to overwrite ------------
+# Runs every bootstrap, but it's only non-empty on machines that already had
+# some of the managed files laying around (e.g. partially-configured hosts).
+# Fresh installs find nothing to back up and this becomes a silent no-op.
+BACKUP_ROOT="$HOME/.chezmoi-backups"
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+BACKUP_DIR="$BACKUP_ROOT/$TIMESTAMP"
+
+collisions=()
+while IFS= read -r rel; do
+  [ -n "$rel" ] || continue
+  abs="$HOME/$rel"
+  # Skip if target doesn't exist (nothing to back up), or is a dir, or is a
+  # symlink (chezmoi may manage the link target separately).
+  [ -f "$abs" ] && [ ! -L "$abs" ] && collisions+=("$rel")
+done < <(chezmoi managed --include=files 2>/dev/null || true)
+
+if [ "${#collisions[@]}" -eq 0 ]; then
+  log "No pre-existing managed files to back up"
+else
+  log "Backing up ${#collisions[@]} pre-existing file(s) to $BACKUP_DIR"
+  mkdir -p "$BACKUP_DIR"
+  for rel in "${collisions[@]}"; do
+    dest="$BACKUP_DIR/$rel"
+    mkdir -p "$(dirname "$dest")"
+    cp -p "$HOME/$rel" "$dest"
+  done
+  log "Snapshot complete — originals still in place, backups at $BACKUP_DIR"
+fi
+
+# 7. chezmoi apply ------------------------------------------------------------
+log "Running chezmoi apply"
+chezmoi apply
 
 log "Done."
 echo
 echo "Next steps:"
 echo "  - Open a new terminal (or 'source ~/.bashrc') to pick up the new env"
-echo "  - Restore GPG signing keys if needed: fetch 'gpg-claude-desktop-debian' /"
-echo "    'gpg-selkie' / 'gpg-ownertrust' attachments/notes from Bitwarden"
-echo "    and run 'gpg --import <file>' + 'gpg --import-ownertrust <file>'"
+echo
+echo "  Interactive auth (one-time, rotating tokens no longer in Bitwarden):"
+echo "    1. claude                          # triggers Claude Code OAuth in the browser"
+echo "    2. First Gmail MCP tool call via Claude Code triggers Gmail OAuth"
+echo "       (reads ~/.gmail-mcp/gcp-oauth.keys.json, writes ~/.gmail-mcp/credentials.json)"
+echo
+if [ "${#collisions[@]}" -gt 0 ]; then
+  echo "  ${#collisions[@]} pre-existing file(s) were backed up to: $BACKUP_DIR"
+  echo "  Review and restore selectively with e.g.:"
+  echo "    cp -p $BACKUP_DIR/.bashrc ~/.bashrc"
+  echo
+fi
+echo "  GPG release signing keys (still manual): fetch 'gpg-claude-desktop-debian' /"
+echo "  'gpg-selkie' / 'gpg-ownertrust' attachments/notes from Bitwarden"
+echo "  and run 'gpg --import <file>' + 'gpg --import-ownertrust <file>'"
