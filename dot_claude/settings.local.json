@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp:*)",
+      "Bash(stow starship:*)",
+      "Bash(stow npm:*)",
+      "Bash(stow --adopt starship)",
+      "Bash(stow --adopt npm)",
+      "Bash(gh api:*)",
+      "Bash(ls -la /home/aaddrick/Downloads/*.iso*)",
+      "Bash(ls -la /home/aaddrick/Downloads/*.part*)",
+      "Bash(ls -la /home/aaddrick/Downloads/*.crdownload*)",
+      "Bash(lsblk -o NAME,SIZE,TYPE,MOUNTPOINT,MODEL)",
+      "Bash(umount /dev/sdb1)",
+      "Bash(sudo dd:*)",
+      "Bash(chmod +x:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}

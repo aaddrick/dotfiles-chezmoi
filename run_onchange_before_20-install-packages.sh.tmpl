@@ -1,0 +1,191 @@
+#!/usr/bin/env bash
+# Installs packages and flatpaks on Fedora/Nobara systems.
+# Re-runs whenever this file's rendered content changes (run_onchange_).
+#
+# Failure policy: individual package/flatpak/repo failures are logged and
+# skipped, but the script exits 0 so chezmoi proceeds to apply dotfiles —
+# a flaky flatpak or a temporarily-unreachable repo shouldn't wedge the
+# whole apply. Unrecovered failures are still loud in the summary, and
+# re-running `chezmoi apply` retries them (run_onchange_ only stores the
+# hash on exit 0, but since we exit 0, the next apply will skip unless the
+# script text changes — if you want to force a retry, edit the file or
+# `chezmoi state delete-bucket --bucket=scriptState`).
+#
+# Hard prerequisites (wrong OS, no sudo/dnf, no passwordless sudo) still
+# cause an early exit with a clear message.
+#
+# Passwordless sudo is set up by bootstrap.sh, not here.
+set -uo pipefail
+
+{{ if (or (eq .chezmoi.osRelease.id "nobara") (eq .chezmoi.osRelease.id "fedora")) -}}
+
+log()  { printf '\033[1;34m[packages]\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m[packages warn]\033[0m %s\n' "$*" >&2; }
+die()  { printf '\033[1;31m[packages error]\033[0m %s\n' "$*" >&2; exit 1; }
+
+FAILURES=()
+record_failure() { FAILURES+=("$1"); warn "$1"; }
+
+# --- Prerequisite checks ----------------------------------------------------
+
+[ "$(id -u)" -eq 0 ] && die "do not run as root; run as your user (script will sudo as needed)"
+command -v sudo >/dev/null 2>&1 || die "sudo not found in PATH"
+command -v dnf  >/dev/null 2>&1 || die "dnf not found in PATH"
+
+USER_NAME="$(id -un)"
+SUDOERS_FILE="/etc/sudoers.d/90-${USER_NAME}-nopasswd"
+sudo -n test -f "$SUDOERS_FILE" 2>/dev/null \
+  || die "passwordless sudo not configured ($SUDOERS_FILE missing) — run bootstrap.sh first"
+
+{{ if eq .machineRole "workstation" -}}
+# --- Third-party repos (workstation-only) -----------------------------------
+
+# Fetch a .repo file from a URL into /etc/yum.repos.d/. Single source of
+# truth: the canonical .repo lives on the upstream project's GitHub Pages,
+# so we just curl it down instead of inlining its content here.
+fetch_repo_file() {
+  local name="$1" url="$2" path="$3"
+  if [ -f "$path" ]; then
+    log "Repo already present: $name"
+    return 0
+  fi
+  log "Fetching repo: $name"
+  if ! sudo curl -fsSL "$url" -o "$path"; then
+    record_failure "repo: $name (could not fetch $url)"
+    return 1
+  fi
+}
+
+# Google Chrome: installing the rpm drops /etc/yum.repos.d/google-chrome.repo
+if rpm -q google-chrome-stable >/dev/null 2>&1; then
+  log "Google Chrome already installed"
+else
+  log "Installing Google Chrome (adds its own repo)"
+  if ! sudo rpm --import https://dl.google.com/linux/linux_signing_key.pub; then
+    record_failure "chrome: gpg key import failed"
+  elif ! sudo dnf install -y \
+      https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm; then
+    record_failure "chrome: rpm install failed"
+  fi
+fi
+
+fetch_repo_file "claude-desktop" \
+  https://aaddrick.github.io/claude-desktop-debian/rpm/claude-desktop.repo \
+  /etc/yum.repos.d/claude-desktop.repo || true
+
+fetch_repo_file "selkie" \
+  https://aaddrick.github.io/selkie/rpm/selkie.repo \
+  /etc/yum.repos.d/selkie.repo || true
+{{ else -}}
+log "Skipping workstation-only repos (machineRole={{ .machineRole }})"
+{{ end -}}
+
+# --- DNF packages -----------------------------------------------------------
+
+DNF_PACKAGES=(
+  # --- Common (every machineRole) ------------------------------------------
+  # Shell / CLI tools
+  chezmoi gh neovim vim-enhanced difftastic ShellCheck bats
+  fzf zoxide fastfetch tree jq distrobox toolbox
+
+  # Compilers / language runtimes
+  gcc-c++ gcc-gfortran python3-devel python3-pip
+  ruby ruby-devel temurin-17-jdk nodejs
+
+  # Encryption (chezmoi age integration)
+  age
+
+  # Build tools for claude-desktop-debian and other packaging work
+  # (wrestool/icotool live in icoutils; dpkg-deb lives in dpkg)
+  p7zip p7zip-plugins wget icoutils ImageMagick dpkg rpm-build
+
+  # PHP + extensions
+  php php-cli php-bcmath php-mbstring php-pdo
+  php-pecl-zip php-pgsql php-xml
+
+  # Databases
+  postgresql mariadb-server
+
+{{ if eq .machineRole "workstation" -}}
+  # --- Workstation-only ----------------------------------------------------
+  # LaTeX stack
+  texlive-scheme-basic texlive-collection-latexrecommended
+  texlive-ebgaramond texlive-mdframed texlive-needspace
+  texlive-newunicodechar texlive-pgfplots texlive-tcolorbox
+
+  # Custom repo desktop apps
+  claude-desktop selkie
+{{ end -}}
+)
+
+# Filter to packages not already installed, so re-runs are fast.
+TO_INSTALL=()
+for pkg in "${DNF_PACKAGES[@]}"; do
+  rpm -q "$pkg" >/dev/null 2>&1 || TO_INSTALL+=("$pkg")
+done
+
+if [ "${#TO_INSTALL[@]}" -eq 0 ]; then
+  log "All dnf packages already installed"
+else
+  log "Installing ${#TO_INSTALL[@]} dnf packages (batch)"
+  if ! sudo dnf install -y "${TO_INSTALL[@]}"; then
+    warn "batch install failed; retrying per-package to isolate failures"
+    for pkg in "${TO_INSTALL[@]}"; do
+      if rpm -q "$pkg" >/dev/null 2>&1; then
+        continue  # installed by the partial batch
+      fi
+      if ! sudo dnf install -y "$pkg"; then
+        record_failure "dnf: $pkg"
+      fi
+    done
+  fi
+fi
+
+{{ if eq .machineRole "workstation" -}}
+# --- Flatpaks (workstation-only) --------------------------------------------
+
+if ! command -v flatpak >/dev/null 2>&1; then
+  record_failure "flatpak: binary missing, skipping flatpak installs"
+else
+  FLATPAKS=(
+    com.discordapp.Discord
+    org.signal.Signal
+  )
+
+  log "Ensuring flathub remote is configured (user scope)"
+  if ! flatpak remote-add --if-not-exists --user flathub \
+      https://flathub.org/repo/flathub.flatpakrepo; then
+    record_failure "flatpak: could not add flathub remote"
+  fi
+
+  for app in "${FLATPAKS[@]}"; do
+    if flatpak info --user "$app" >/dev/null 2>&1 \
+       || flatpak info "$app" >/dev/null 2>&1; then
+      continue
+    fi
+    log "Installing flatpak: $app"
+    if ! flatpak install -y --user --noninteractive flathub "$app"; then
+      record_failure "flatpak: $app"
+    fi
+  done
+fi
+{{ else -}}
+log "Skipping flatpaks (machineRole={{ .machineRole }})"
+{{ end -}}
+
+# --- Summary ----------------------------------------------------------------
+
+if [ "${#FAILURES[@]}" -eq 0 ]; then
+  log "All packages installed successfully"
+  exit 0
+fi
+
+warn "Completed with ${#FAILURES[@]} failure(s) — continuing so chezmoi can apply dotfiles:"
+for f in "${FAILURES[@]}"; do
+  printf '  - %s\n' "$f" >&2
+done
+exit 0
+
+{{ else -}}
+echo "Skipping package install: unsupported OS ({{ .chezmoi.osRelease.id }})"
+{{ end -}}

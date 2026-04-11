@@ -1,0 +1,12 @@
+# External sources pulled in during `chezmoi apply`. Each entry is a target
+# path (relative to $HOME) that chezmoi will populate from a remote source.
+
+[".config/nvim"]
+    type          = "git-repo"
+    url           = "https://github.com/nvim-lua/kickstart.nvim.git"
+    # Refresh weekly so we pick up upstream changes without being too noisy.
+    refreshPeriod = "168h"
+    [".config/nvim".clone]
+        args = ["--depth", "1"]
+    [".config/nvim".pull]
+        args = ["--ff-only"]

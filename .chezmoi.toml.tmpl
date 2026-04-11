@@ -1,0 +1,38 @@
+{{/*
+   chezmoi config template.
+   Rendered to ~/.config/chezmoi/chezmoi.toml on `chezmoi init`.
+   Re-run `chezmoi init` after editing to regenerate.
+*/ -}}
+
+{{- $defaultRole := "workstation" -}}
+{{- if eq .chezmoi.hostname "mimir" -}}
+{{-   $defaultRole = "homelab" -}}
+{{- end -}}
+{{- $role := promptStringOnce . "machineRole" "Machine role (workstation|homelab)" $defaultRole -}}
+
+encryption = "age"
+
+[age]
+    identity  = "~/.config/chezmoi/key.txt"
+    recipient = "age1xj20wev28delc7yygl8n90ctz77zyq8wu0u5wxu6l2epphhvqs0s837dgm"
+
+[edit]
+    command = "nvim"
+
+[git]
+    # Automatically commit dotfile edits made via `chezmoi edit`, and push
+    # them to the remote. Keeps the source repo in sync without manual git.
+    autoCommit = true
+    autoPush   = true
+    # Draft commit messages via `claude -p --model claude-sonnet-4-6`.
+    #
+    # The raw-string scaffolding below keeps the inner template literal.
+    # This .tmpl file is rendered once at chezmoi init, and the resulting
+    # commitMessageTemplate is re-rendered by chezmoi at every commit.
+    # The helper script itself handles claude invocation, markdown fence
+    # stripping, and fallback. The test-x guard handles the first-run case
+    # where the helper has not been applied yet.
+    commitMessageTemplate = '''{{`{{ output "sh" "-c" "test -x /home/aaddrick/.local/bin/chezmoi-commit-message.sh && /home/aaddrick/.local/bin/chezmoi-commit-message.sh /home/aaddrick/.local/share/chezmoi || echo chore: update dotfiles" }}`}}'''
+
+[data]
+    machineRole = {{ $role | quote }}
