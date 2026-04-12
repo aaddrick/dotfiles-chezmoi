@@ -55,7 +55,7 @@ fi
 if ! command -v bw >/dev/null 2>&1; then
   log "Installing Bitwarden CLI"
   if command -v npm >/dev/null 2>&1; then
-    npm install -g @bitwarden/cli
+    sudo npm install -g @bitwarden/cli
   else
     tmpd=$(mktemp -d)
     trap 'rm -rf "$tmpd"' EXIT
