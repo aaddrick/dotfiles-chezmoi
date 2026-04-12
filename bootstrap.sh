@@ -172,7 +172,13 @@ else
   log "Snapshot complete — originals still in place, backups at $BACKUP_DIR"
 fi
 
-# 7. chezmoi apply ------------------------------------------------------------
+# 7. Pre-create external git-repo targets -------------------------------------
+# chezmoi can fail on first run with "chdir: no such file or directory" for
+# git-repo externals if it tries to pull before the target dir exists.
+# Pre-creating the directories ensures the clone path works reliably.
+mkdir -p "$HOME/.config/nvim"
+
+# 8. chezmoi apply ------------------------------------------------------------
 log "Running chezmoi apply"
 chezmoi apply
 
