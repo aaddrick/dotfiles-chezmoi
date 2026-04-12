@@ -130,6 +130,9 @@ alias claudep='claude -p'
 alias claudedp='claude -p --dangerously-skip-permissions'
 alias claudepd='claude -p --dangerously-skip-permissions'
 
+# Bitwarden
+bwu() { export BW_SESSION=$(bw unlock --raw); }
+
 # Shell aliases
 alias sb='source ~/.bashrc'
 
