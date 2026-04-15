@@ -281,3 +281,7 @@ toggle do not disturb=none,,Toggle do not disturb
 
 [services][org.kde.konsole.desktop]
 _launch=Meta+T
+
+[services][org.kde.spectacle.desktop]
+CurrentMonitorScreenShot=
+OpenWithoutScreenshot=
