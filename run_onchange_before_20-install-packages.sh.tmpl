@@ -76,6 +76,29 @@ fetch_repo_file "claude-desktop" \
 fetch_repo_file "selkie" \
   https://aaddrick.github.io/selkie/rpm/selkie.repo \
   /etc/yum.repos.d/selkie.repo || true
+
+# VS Code: Microsoft doesn't ship a .repo URL, so import the key and write
+# the repo definition inline, then let dnf install pick up `code` below.
+if [ -f /etc/yum.repos.d/vscode.repo ]; then
+  log "VS Code repo already present"
+else
+  log "Configuring VS Code repo (Microsoft)"
+  if ! sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc; then
+    record_failure "vscode: gpg key import failed"
+  elif ! sudo tee /etc/yum.repos.d/vscode.repo >/dev/null <<'VSCODE_REPO'
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+autorefresh=1
+type=rpm-md
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+VSCODE_REPO
+  then
+    record_failure "vscode: could not write /etc/yum.repos.d/vscode.repo"
+  fi
+fi
 {{ else -}}
 log "Skipping workstation-only repos (machineRole={{ .machineRole }})"
 {{ end -}}
@@ -110,11 +133,13 @@ DNF_PACKAGES=(
   # --- Workstation-only ----------------------------------------------------
   # LaTeX stack
   texlive-scheme-basic texlive-collection-latexrecommended
+  texlive-xetex texlive-fontspec texlive-eurosym
   texlive-ebgaramond texlive-mdframed texlive-needspace
   texlive-newunicodechar texlive-pgfplots texlive-tcolorbox
+  latexmk dejavu-serif-fonts
 
   # Custom repo desktop apps
-  claude-desktop selkie
+  claude-desktop selkie code
 {{ end -}}
 )
 
