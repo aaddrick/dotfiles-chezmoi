@@ -9,6 +9,7 @@ Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,
 _k_friendly_name=Keyboard Layout Switcher
 
 [electron]
+7EE1B2723273E2CDCE88C7A44BB0D918-Ctrl+Alt+Space=,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 CAC25DA6DE474FEE61EF6CF3A88C7A60-Ctrl+Alt+Space=none,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 _k_friendly_name=electron
 
