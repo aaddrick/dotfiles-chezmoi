@@ -21,5 +21,6 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "autoCompactEnabled": false,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "tui": "fullscreen"
 }
