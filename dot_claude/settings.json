@@ -15,6 +15,7 @@
     "playwright@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true
   },
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
@@ -22,5 +23,5 @@
   "skipDangerousModePermissionPrompt": true,
   "autoCompactEnabled": false,
   "voiceEnabled": true,
-  "tui": "fullscreen"
+  "model": "claude-fable-5[1m]"
 }
