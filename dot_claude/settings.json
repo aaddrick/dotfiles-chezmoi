@@ -6,6 +6,7 @@
   "permissions": {
     "defaultMode": "default"
   },
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -22,6 +23,5 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "autoCompactEnabled": false,
-  "voiceEnabled": true,
-  "model": "claude-fable-5[1m]"
+  "voiceEnabled": true
 }
