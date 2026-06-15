@@ -1,9 +1,5 @@
 # Global Development Environment
 
-## Gmail MCP
-
-Prefer the local `gmail` MCP (`mcp__gmail__*`) over the Claude AI built-in (`mcp__claude_ai_Gmail__*`). The local one supports read and write (send, draft, modify). The Claude AI one is read-only — use it as a fallback if the local MCP is unavailable.
-
 ## IDE / Editor Extensions
 
 ### Intelephense (PHP Language Server)
