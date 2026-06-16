@@ -21,6 +21,10 @@ _k_friendly_name=electron
 C7DC48438BAE9DAA09D6C0F676F7D850-Ctrl+Alt+Space=,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 _k_friendly_name=io.github.aaddrick.claude-desktop-debian
 
+[io.github.wispr-flow-helpertest]
+_k_friendly_name=io.github.wispr-flow-helpertest
+ptt=Meta+Ctrl+F8,Meta+Ctrl+F8,Wispr Flow push-to-talk
+
 [io.github.wispr-flow-spike]
 _k_friendly_name=io.github.wispr-flow-spike
 wf_ident_probe=Meta+Ctrl+F9,Meta+Ctrl+F9,Wispr identity probe: Ctrl+Meta+F9
