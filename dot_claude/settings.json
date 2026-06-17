@@ -23,6 +23,7 @@
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
   "autoCompactEnabled": false,
   "voiceEnabled": true
 }
