@@ -25,5 +25,6 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "auto",
   "autoCompactEnabled": false,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "effortLevel": "xhigh"
 }
