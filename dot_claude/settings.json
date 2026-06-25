@@ -17,6 +17,7 @@
     "php-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
   },
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -26,5 +27,5 @@
   "theme": "auto",
   "autoCompactEnabled": false,
   "voiceEnabled": true,
-  "effortLevel": "xhigh"
+  "agentPushNotifEnabled": true
 }
