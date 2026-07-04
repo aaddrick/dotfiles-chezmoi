@@ -10,6 +10,8 @@ _k_friendly_name=Keyboard Layout Switcher
 
 [desktop]
 7EE1B2723273E2CDCE88C7A44BB0D918-Ctrl+Alt+Space=,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
+C7DC48438BAE9DAA09D6C0F676F7D850-Ctrl+Alt+Space=Ctrl+Alt+Space,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
+E3103A0DF4AC1903581434394B7FF1E7-Ctrl+Alt+9=Ctrl+Alt+9,Ctrl+Alt+9,Claude shortcut: Ctrl+Alt+9
 _k_friendly_name=desktop
 
 [electron]

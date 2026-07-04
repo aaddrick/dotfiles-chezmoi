@@ -6,7 +6,7 @@
   "permissions": {
     "defaultMode": "default"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -17,7 +17,7 @@
     "php-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -27,5 +27,8 @@
   "theme": "auto",
   "autoCompactEnabled": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "env": {
+    "CLAUDE_AFK_TIMEOUT_MS": "604800000"
+  }
 }
