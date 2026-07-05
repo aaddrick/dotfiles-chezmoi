@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_AFK_TIMEOUT_MS": "604800000"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -6,7 +9,7 @@
   "permissions": {
     "defaultMode": "default"
   },
-  "model": "opus[1m]",
+  "model": "Fable",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -27,8 +30,5 @@
   "theme": "auto",
   "autoCompactEnabled": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "env": {
-    "CLAUDE_AFK_TIMEOUT_MS": "604800000"
-  }
+  "voiceEnabled": true
 }
