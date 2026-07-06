@@ -9,7 +9,7 @@
   "permissions": {
     "defaultMode": "default"
   },
-  "model": "Fable",
+  "model": "fable",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
