@@ -19,13 +19,20 @@
     "playwright@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "ticketmill@ticketmill": true
+    "ticketmill@ticketmill": true,
+    "attention-control@attention-control": true
   },
   "extraKnownMarketplaces": {
     "ticketmill": {
       "source": {
         "source": "github",
         "repo": "aaddrick/ticketmill"
+      }
+    },
+    "attention-control": {
+      "source": {
+        "source": "github",
+        "repo": "aaddrick/attention-control"
       }
     }
   },

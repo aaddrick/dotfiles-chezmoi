@@ -20,5 +20,6 @@
       "Bash(ls -d /usr/src/*xpadneo*)",
       "Bash(ls -d /home/aaddrick/xpadneo)"
     ]
-  }
+  },
+  "outputStyle": "attention-control:Attention Control"
 }
