@@ -10,7 +10,6 @@
     "defaultMode": "default"
   },
   "model": "opus[1m]",
-  "outputStyle": "Attention Control",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -28,12 +27,6 @@
       "source": {
         "source": "github",
         "repo": "aaddrick/ticketmill"
-      }
-    },
-    "attention-control": {
-      "source": {
-        "source": "github",
-        "repo": "aaddrick/attention-control"
       }
     }
   },
