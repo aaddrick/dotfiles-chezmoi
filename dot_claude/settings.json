@@ -9,7 +9,7 @@
   "permissions": {
     "defaultMode": "default"
   },
-  "model": "claude-fable-5-1[1m]",
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
