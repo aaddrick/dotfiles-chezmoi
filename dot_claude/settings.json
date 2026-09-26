@@ -20,13 +20,20 @@
     "php-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "ticketmill@ticketmill": true,
-    "attention-control@attention-control": true
+    "attention-control@attention-control": true,
+    "building-with-typesafe-jev@building-with-typesafe-jev": true
   },
   "extraKnownMarketplaces": {
     "ticketmill": {
       "source": {
         "source": "github",
         "repo": "aaddrick/ticketmill"
+      }
+    },
+    "building-with-typesafe-jev": {
+      "source": {
+        "source": "github",
+        "repo": "aaddrick/building-with-typesafe-jev"
       }
     }
   },
