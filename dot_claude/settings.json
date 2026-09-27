@@ -7,9 +7,13 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "model": "opus",
+  "skillOverrides": {
+    "journal": "off",
+    "writing-release-notes": "off"
+  },
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -18,8 +22,8 @@
     "typescript-lsp@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "ticketmill@ticketmill": true,
+    "rust-analyzer-lsp@claude-plugins-official": false,
+    "ticketmill@ticketmill": false,
     "attention-control@attention-control": true,
     "building-with-typesafe-jev@building-with-typesafe-jev": true
   },
@@ -43,6 +47,7 @@
       "effortLevel": "medium"
     }
   },
+  "pluginConfigs": {},
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
