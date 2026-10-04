@@ -42,6 +42,12 @@
         "source": "github",
         "repo": "aaddrick/building-with-typesafe-jev"
       }
+    },
+    "scripting-blender-scenes": {
+      "source": {
+        "source": "directory",
+        "path": "/home/aaddrick/source/scripting-blender-scenes"
+      }
     }
   },
   "effortLevel": "high",
