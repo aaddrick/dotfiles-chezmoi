@@ -28,7 +28,8 @@
     "rust-analyzer-lsp@claude-plugins-official": false,
     "ticketmill@ticketmill": false,
     "attention-control@attention-control": true,
-    "building-with-typesafe-jev@building-with-typesafe-jev": true
+    "building-with-typesafe-jev@building-with-typesafe-jev": true,
+    "latent-space@claude-code-bbs": true
   },
   "extraKnownMarketplaces": {
     "ticketmill": {
@@ -47,6 +48,12 @@
       "source": {
         "source": "directory",
         "path": "/home/aaddrick/source/scripting-blender-scenes"
+      }
+    },
+    "claude-code-bbs": {
+      "source": {
+        "source": "github",
+        "repo": "mattfogel/claude-code-bbs"
       }
     }
   },
