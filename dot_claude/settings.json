@@ -28,8 +28,8 @@
     "rust-analyzer-lsp@claude-plugins-official": false,
     "ticketmill@ticketmill": false,
     "attention-control@attention-control": true,
-    "building-with-typesafe-jev@building-with-typesafe-jev": true,
-    "latent-space@claude-code-bbs": true
+    "latent-space@claude-code-bbs": true,
+    "building-with-typesafe-jev@synced": false
   },
   "extraKnownMarketplaces": {
     "ticketmill": {
@@ -54,6 +54,12 @@
       "source": {
         "source": "github",
         "repo": "mattfogel/claude-code-bbs"
+      }
+    },
+    "building-with-decision-models": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/aaddrick/building-with-decision-models.git"
       }
     }
   },
