@@ -80,5 +80,40 @@
   "autoCompactEnabled": false,
   "agentPushNotifEnabled": true,
   "voiceEnabled": true,
-  "switchModelsOnFlag": true
+  "switchModelsOnFlag": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/aaddrick/.atuin/bin/atuin hook claude-code"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/aaddrick/.atuin/bin/atuin hook claude-code"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/aaddrick/.atuin/bin/atuin hook claude-code"
+          }
+        ]
+      }
+    ]
+  }
 }
