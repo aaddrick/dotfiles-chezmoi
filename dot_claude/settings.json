@@ -47,7 +47,7 @@
     "scripting-blender-scenes": {
       "source": {
         "source": "directory",
-        "path": "/home/aaddrick/source/scripting-blender-scenes"
+        "path": "/home/aaddrick/source/tools/scripting-blender-scenes"
       }
     },
     "claude-code-bbs": {

@@ -8,6 +8,10 @@ Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,
 Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,
 _k_friendly_name=Keyboard Layout Switcher
 
+[com.nousresearch.hermes]
+C524C3F611C877BF4712279E45D95127-Ctrl+Shift+Space=Ctrl+Shift+Space,Ctrl+Shift+Space,Hermes shortcut: Ctrl+Shift+Space
+_k_friendly_name=Hermes
+
 [desktop]
 7EE1B2723273E2CDCE88C7A44BB0D918-Ctrl+Alt+Space=none,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 C7DC48438BAE9DAA09D6C0F676F7D850-Ctrl+Alt+Space=Ctrl+Alt+Space,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
@@ -307,7 +311,3 @@ toggle do not disturb=none,none,Toggle do not disturb
 
 [services][org.kde.konsole.desktop]
 _launch=Meta+T
-
-[services][org.kde.spectacle.desktop]
-CurrentMonitorScreenShot=none
-OpenWithoutScreenshot=none
