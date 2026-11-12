@@ -12,7 +12,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "fable",
+  "model": "opus",
   "skillOverrides": {
     "journal": "off",
     "writing-release-notes": "off"
@@ -64,7 +64,8 @@
     "ticketmill@ticketmill": false,
     "attention-control@attention-control": true,
     "latent-space@claude-code-bbs": true,
-    "building-with-typesafe-jev@synced": false
+    "building-with-typesafe-jev@synced": false,
+    "directing-agent-teams@directing-agent-teams": true
   },
   "extraKnownMarketplaces": {
     "ticketmill": {
@@ -95,6 +96,12 @@
       "source": {
         "source": "git",
         "url": "https://github.com/aaddrick/building-with-decision-models.git"
+      }
+    },
+    "directing-agent-teams": {
+      "source": {
+        "source": "github",
+        "repo": "aaddrick/directing-agent-teams"
       }
     }
   },
