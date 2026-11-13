@@ -12,7 +12,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "fable",
   "skillOverrides": {
     "journal": "off",
     "writing-release-notes": "off"
